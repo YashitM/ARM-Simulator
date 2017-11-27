@@ -5,6 +5,7 @@ from tkinter import *
 import backend
 import time
 
+<<<<<<< HEAD
 # The following dictionary will be recieved from backend.py
 stringsToPrint = ["Fetch instruction 0xE3A0200A from address 0x0", 
 				  "DECODE: Operation is MOV , First Operand is R0 , immediate Second Operand is 10 , Destination Register is R2",
@@ -37,6 +38,8 @@ stringsToPrint = ["Fetch instruction 0xE3A0200A from address 0x0",
 				  "\n",
 				  ]
 
+=======
+>>>>>>> 467650c45a48c05b66e2183c3a38289119cafa4d
 registers = {'R0':0, 'R1':0, 'R2':0, 'R3':0, 'R4':0, 'R5':0, 'R6':0, 'R7':0, 'R8':0, 'R9':0, 'R10':0, 'R11':0, 'R12':0, 'R13':0, 'R14':0, 'R15':0}
 flags = {'N': 0, 'Z':0, 'C':0, 'V':0}
 
