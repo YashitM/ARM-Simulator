@@ -6,7 +6,7 @@ from tkinter import *
 import time
 
 registers = {'R0':0, 'R1':0, 'R2':0, 'R3':0, 'R4':0, 'R5':0, 'R6':0, 'R7':0, 'R8':0, 'R9':0, 'R10':0, 'R11':0, 'R12':0, 'R13':0, 'R14':0, 'R15':0}
-
+flags = {'N': 0, 'Z':0, 'C':0, 'V':0}
 
 root = tkinter.Tk()
 
@@ -17,6 +17,7 @@ toolbar = Frame(root)
 # Global padding values
 xAxis = 2
 yAxis = 2
+
 
 # TextView Main Text Code
 S1 = Scrollbar(root)
@@ -38,7 +39,7 @@ T2.config(yscrollcommand=S2.set)
 def executeButton():
 	print ("Working")
 	lineNumber = 1
-	for line in T.get('1.0', 'end-1c').splitlines():
+	for line in T1.get('1.0', 'end-1c').splitlines():
 		if line:
 			print('path: {}'.format(line))
 		lineNumber += 1
@@ -62,8 +63,9 @@ def file_dialog():
 
 def showRegisters():
 	for i in registers:
-		T2.insert(END, i+":\t"+str(registers[i]))
-		T2.insert(END, "\n")
+		T2.insert(END, i+":\t"+str(registers[i])+"\n")
+	for i in flags:
+		T2.insert(END, i+":\t"+str(flags[i])+"\n")
 
 
 menu = Menu(root)
