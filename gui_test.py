@@ -2,12 +2,18 @@
 from tkinter import filedialog
 import tkinter 
 from tkinter import *
+import backend
+import time
 
 root = tkinter.Tk()
 
 root.geometry('{}x{}'.format(850, 600))
 
 toolbar = Frame(root)
+
+# Global padding values
+xAxis = 2
+yAxis = 2
 
 # TextView Code
 S = Scrollbar(root)
@@ -24,11 +30,19 @@ def file_dialog():
 		file.close()
 		T.insert(END, data)
 
+def executeButton():
+	print ("Working")
+	lineNumber = 1
+	for line in T.get('1.0', 'end-1c').splitlines():
+		if line:
+			print('path: {}'.format(line))
+		lineNumber += 1
+
 menu = Menu(root)
 root.config(menu=menu)
-
+B = tkinter.Button(root, text ="Execute", padx=xAxis, pady=yAxis, command=executeButton)
+B.pack()
 menu.add_command(label="Open", command=file_dialog)
-
 toolbar.pack(side=TOP, fill=X)
 
 mainloop()
