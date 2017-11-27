@@ -4,6 +4,8 @@ import sys
 
 opcodes = {'0000':'AND', '0001': 'EOR', '0010': 'SUB', '0011': 'RSB', '0100': 'ADD', '0101':'ADC', '0110':'SBC', '0111':'RSC', '1000':'TST', '1001':'TEQ', '1010':'CMP', '1011':'CMN', '1100':'ORR', '1101':'MOV', '1110':'BIC', '1111':'MVN'}
 registers = {'R0':0, 'R1':0, 'R2':0, 'R3':0, 'R4':0, 'R5':0, 'R6':0, 'R7':0, 'R8':0, 'R9':0, 'R10':0, 'R11':0, 'R12':0, 'R13':0, 'R14':0, 'R15':0}
+flags = {'N': 0, 'Z':0, 'C':0, 'V':0}
+conditions = {}
 instructions = []
 
 #----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -154,21 +156,23 @@ def execute(address, instruction, cond, opcode, immediate, setConditionCode, fir
 
 #----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-with open('input.MEM', 'r') as f:
-	instructions = f.readlines()
-for i in range(len(instructions)):
-	instructions[i] = instructions[i].rstrip("\n")
-i = 0
-while i < len(instructions):
 
-	address, instruction, cond, opcode, immediate, setConditionCode, firstOperandRegister, destinationRegister, shift, operandTwo, secondOperandRegister, rotate, imm = decode(instructions[i])
-	execute(address, instruction, cond, opcode, immediate, setConditionCode, firstOperandRegister, destinationRegister, shift, operandTwo, secondOperandRegister, rotate, imm)	
-	
-	print ("MEMORY: No memory operation")
-	print ("WRITEBACK: write", registers[destinationRegister], "to", destinationRegister)
-	print ()
-	i += 1
-print (registers)
+if __name__ == '__main__':
+	with open('input.MEM', 'r') as f:
+		instructions = f.readlines()
+	for i in range(len(instructions)):
+		instructions[i] = instructions[i].rstrip("\n")
+	i = 0
+	while i < len(instructions):
+
+		address, instruction, cond, opcode, immediate, setConditionCode, firstOperandRegister, destinationRegister, shift, operandTwo, secondOperandRegister, rotate, imm = decode(instructions[i])
+		execute(address, instruction, cond, opcode, immediate, setConditionCode, firstOperandRegister, destinationRegister, shift, operandTwo, secondOperandRegister, rotate, imm)	
+		
+		print ("MEMORY: No memory operation")
+		print ("WRITEBACK: write", registers[destinationRegister], "to", destinationRegister)
+		print ()
+		i += 1
+	print (registers)
 
 
 #1110 00 1 1101 0 0000 0010 000000001010
