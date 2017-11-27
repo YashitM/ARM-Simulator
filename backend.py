@@ -29,7 +29,7 @@ def decode(i):
 	secondOperandRegister = 0
 	if "0" in immediate:
 		shift = operandTwo[:8]
-		regOrImm = shift[8]
+		regOrImm = shift[7]
 		shiftType = shift[5:7]
 		shiftAmount = 0
 		secondOperandRegister = "R" + str(int(operandTwo[8:], 2))
@@ -41,7 +41,7 @@ def decode(i):
 			registers[secondOperandRegister] = registers[secondOperandRegister] << shiftAmount
 		elif "01" in shiftType:
 			registers[secondOperandRegister] = registers[secondOperandRegister] >> shiftAmount
-		elif "10" in shiftType:
+		#elif "10" in shiftType:
 
 		else:
 			binstring = bin(registers[secondOperandRegister], 2)[2:]
