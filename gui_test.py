@@ -5,41 +5,6 @@ from tkinter import *
 import backend
 import time
 
-<<<<<<< HEAD
-# The following dictionary will be recieved from backend.py
-stringsToPrint = ["Fetch instruction 0xE3A0200A from address 0x0", 
-				  "DECODE: Operation is MOV , First Operand is R0 , immediate Second Operand is 10 , Destination Register is R2",
-				  "Read Registers: R0 = 0",
-				  "EXECUTE: MOV 10 in R2",
-				  "MEMORY: No memory operation",
-				  "WRITEBACK: write 10 to R2",
-				  "\n",
-				  "Fetch instruction 0xE3A03002 from address 0x4",
-				  "DECODE: Operation is MOV , First Operand is R0 , immediate Second Operand is 2 , Destination Register is R3",
-				  "Read Registers: R0 = 0",
-				  "EXECUTE: MOV 2 in R3",
-				  "MEMORY: No memory operation",
-				  "WRITEBACK: write 2 to R3",
-				  "\n",
-				  "Fetch instruction 0xE0821003 from address 0x8",
-				  "DECODE: Operation is ADD , First Operand is R2 , Second Operand is R3 , Destination Register is R1",
-				  "Read Registers: R2 = 10 , R3 = 2",
-				  "EXECUTE: ADD 10 and 2",
-				  "MEMORY: No memory operation",
-				  "WRITEBACK: write 12 to R1",
-				  "\n"
-				  "Fetch instruction 0xEF000011 from address 0xC",
-				  "DECODE: nop",
-				  "Read Registers: nop",
-				  "EXECUTE: nop",
-				  "MEMORY: nop",
-				  "WRITEBACK: nop",
-				  "EXIT:",
-				  "\n",
-				  ]
-
-=======
->>>>>>> 467650c45a48c05b66e2183c3a38289119cafa4d
 registers = {'R0':0, 'R1':0, 'R2':0, 'R3':0, 'R4':0, 'R5':0, 'R6':0, 'R7':0, 'R8':0, 'R9':0, 'R10':0, 'R11':0, 'R12':0, 'R13':0, 'R14':0, 'R15':0}
 flags = {'N': 0, 'Z':0, 'C':0, 'V':0}
 
@@ -96,9 +61,15 @@ def registerToDecimal():
 
 def registerToHex():
 	for i in registers:
-		registers[i] = hex(registers[i])
+		try:
+			registers[i] = hex(registers[i])
+		except TypeError:
+			pass
 	for i in flags:
-		flags[i] = hex(flags[i])
+		try:
+			flags[i] = hex(flags[i])
+		except TypeError:
+			pass
 	showRegisters()
 		
 
