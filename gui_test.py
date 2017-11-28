@@ -43,8 +43,6 @@ def executeButton():
 		if line:
 			print('path: {}'.format(line))
 		lineNumber += 1
-	for line in stringsToPrint:
-		T3.insert(END, line+"\n")
 
 def registerToDecimal():
 	for i in registers:
