@@ -8,9 +8,14 @@ registers = {'R0':0, 'R1':0, 'R2':0, 'R3':0, 'R4':0, 'R5':0, 'R6':0, 'R7':0, 'R8
 flags = {'N': 0, 'Z':0, 'C':0, 'V':0}
 conditions = {'0000': "flags['Z']", '0001': "~flags['Z']", '0010': "flags['C']", '0011': "~flags['C']", '0100': "flags['N']", '0101' : "~flags['N']", '0110' : "flags['V']", '0111' : "~flags['V']", '1000': "flags['C'] * ~flags['Z']", '1001' : "flags['C'] | flags['Z']", '1010' : "~(flags['N'] ^ flags['V'])", '1011' : "flags['N'] ^ flags['V']", '1100' : "~flags['Z'] * ~(flags['N'] ^ flags['V'])", '1101' : "flags['Z'] | (flags['N'] ^ flags['V'])", '1110' : 1}
 addressInstructionMap = {}
-memoryBuffer = {100 : None, 104: 400, 108: None, 112: None, 116 : None, 120: None}
-literalPool = {2000: None, 2004:None, 2008:None, 2012:None}
+memoryBuffer = {}
+literalPool = {200: None, 204:None, 208:None, 212:None}
 instructions = []
+heapAllocated = []
+
+L = [1, 2 , 3, 4]
+print (hex(id(L[0])))
+
 
 #----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -105,37 +110,61 @@ def loadStore(instruction):
 		if "1" in loadStoreBit:
 			print ("DECODE: Operation is LDR, Base register is", baseRegister, ", Destination register is", destinationRegister, ", offset is", totalShift, end="")
 			if "1" in prePostIndiex:
-				registers[destinationRegister] = memoryBuffer[registers[baseRegister] + totalShift]
+				if type(memoryBuffer[registers[baseRegister]]) == list:
+					registers[destinationRegister] = memoryBuffer[registers[baseRegister]][totalShift // 4]
+				else:
+					registers[destinationRegister] = memoryBuffer[registers[baseRegister] + totalShift]
 				print (", pre index increment enabled", end="")
+				"""
 				if "1" in writeBackBit:
 					print (", write back enabled")
 					register[baseRegister] += totalshift
 				else:
 					print (", write back disabled")
+				"""
 				print ("MEMORY: value from address", hex(registers[baseRegister] + totalShift), "read")
+			"""
 			else:
 				registers[destinationRegister] = memoryBuffer[registers[baseRegister]]
 				register[baseRegister] += totalshift
 				print(", post index increment enabled")
 				print ("MEMORY: value from address", hex(registers[baseRegister]), "read")
-			
+			"""
 			print ("WRITEBACK: write", registers[destinationRegister], "to", destinationRegister)
 		else:
 			print ("DECODE: Operation is STR, Base register is", baseRegister, ", Source register is", destinationRegister, ", offset is", totalShift, end="")
 			if "1" in prePostIndiex:
 				print (", pre index increment enabled", end="")
-				memoryBuffer[registers[baseRegister] + totalShift] = registers[destinationRegister]
+				if totalShift % 4 != 0:
+					print ("memory alignment error")
+					sys.exit()
+				else:
+					if type(memoryBuffer[registers[baseRegister]]) == list:
+						memoryBuffer[registers[baseRegister]][totalShift // 4] = registers[destinationRegister]
+					else:
+						memoryBuffer[registers[baseRegister] + totalShift] = registers[destinationRegister]
+				"""
 				if "1" in writeBackBit:
 					print (", write back enabled")
-					registers[baseRegister] += totalshift
+					if type(memoryBuffer[registers[baseRegister]]) == list:
+						registers[baseRegister] += (totalShift // 4) * 32
+					else:
+						registers[baseRegister] += totalshift
 				else:
 					print (", write back disabled")
+				"""
 				print ("MEMORY:", registers[destinationRegister], "written to", hex(registers[baseRegister] + totalShift))
+			"""
 			else:
-				memoryBuffer[registers[baseRegister]] = registers[destinationRegister]
+				if type(memoryBuffer[registers[baseRegister]]) == list:
+						memoryBuffer[registers[baseRegister]][0] = registers[destinationRegister]
+					else:
+						memoryBuffer[registers[baseRegister] + totalShift] = registers[destinationRegister]
+				memoryBuffer[registers[baseRegister]][0] = registers[destinationRegister]
 				registers[baseRegister] += totalshift
 				print(", post index increment enabled")
 				print ("MEMORY:", registers[destinationRegister], "written to", hex(registers[baseRegister]))
+			"""
 			print ("WRITEBACK: No writeback")
 
 def branchInstructions(instruction):
@@ -282,7 +311,7 @@ def executeData(totalShift, instruction, cond, opcode, immediate, setConditionCo
 
 
 if __name__ == '__main__':
-	with open('input2.MEM', 'r') as f:
+	with open('input3.MEM', 'r') as f:
 		instructions = f.readlines()
 	for i in range(len(instructions)):
 		instructions[i] = instructions[i].rstrip("\n")
@@ -291,16 +320,34 @@ if __name__ == '__main__':
 		if i == 0:
 			registers['R15'] = int(add, 16)
 	print (addressInstructionMap)
+
 	while True:
 		offset = 4
 		i = addressInstructionMap[registers['R15']]
 		print ("Fetch instruction", i, "from address", hex(registers['R15']))
-		if "0xEF000011" in i:
+		if "0xEF000011".lower() in i.lower():
 			print ("No memory operation")
 			print ("EXIT:")
 			print (registers)
 			print (memoryBuffer)
 			sys.exit()
+
+		if "0xEF000000".lower() in i.lower():
+			print (chr(registers['R0']))
+
+		if "0xEF000012".lower() in i.lower():
+			size = registers['R0']
+			L = [None] * size
+			memoryBuffer[id(L[0])] = L
+			registers['R0'] = id(L[0])
+			heapAllocated.append(id(L[0]))
+
+		if "0xEFOOOO13".lower() in i.lower():
+			for i in heapAllocated:
+				del memoryBuffer[i]
+
+
+
 		i = "0" * (32 - len(bin(int(i, 16))[2:])) + bin(int(i, 16))[2:]
 
 		print (i)
