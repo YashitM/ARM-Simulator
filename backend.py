@@ -324,6 +324,7 @@ if __name__ == '__main__':
 	while True:
 		offset = 4
 		i = addressInstructionMap[registers['R15']]
+		print (i)
 		print ("Fetch instruction", i, "from address", hex(registers['R15']))
 		if "0xEF000011".lower() in i.lower():
 			print ("No memory operation")
@@ -335,6 +336,12 @@ if __name__ == '__main__':
 		if "0xEF000000".lower() in i.lower():
 			print (chr(registers['R0']))
 
+		if "0xEF000002".lower() in i.lower():
+			string = ""
+			for r in memoryBuffer[registers['R0']]:
+				string += r
+			print (string)
+
 		if "0xEF000012".lower() in i.lower():
 			size = registers['R0']
 			L = [None] * size
@@ -343,11 +350,34 @@ if __name__ == '__main__':
 			heapAllocated.append(id(L[0]))
 
 		if "0xEFOOOO13".lower() in i.lower():
-			for i in heapAllocated:
-				del memoryBuffer[i]
+			for r in heapAllocated:
+				del memoryBuffer[r]
 
+		if "0xEF000069".lower() in i.lower():
+			if registers['R0'] == 1:
+				string = ""
+				for r in memoryBuffer[registers['R1']]:
+					string += r
+				print (string)
 
+		if "0xEF00006C".lower() in i.lower():
+			if registers['R0'] == 0:
+				registers['R0'] = int(input())
 
+		if "0xEF00006A".lower() in i.lower():
+			if registers['R0'] == 0:
+				string = input()
+				if len(string) > registers['R2']:
+					string = string[:registers['R2']]
+				for c in range(len(string)):
+					memoryBuffer[registers['R1']][c] = string[c]
+
+		if "0xEF00006B".lower() in i.lower():
+			if registers['R0'] == 1:
+				print (registers['R1'])
+			else:
+				print ("Invalid file descriptor")
+				sys.exit()
 		i = "0" * (32 - len(bin(int(i, 16))[2:])) + bin(int(i, 16))[2:]
 
 		print (i)
