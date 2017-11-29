@@ -2,11 +2,12 @@
 from tkinter import filedialog
 import tkinter 
 from tkinter import *
-# import backend
+import backend
 import time
 
-registers = {'R0':0, 'R1':0, 'R2':0, 'R3':124, 'R4':0, 'R5':0, 'R6':0, 'R7':0, 'R8':0, 'R9':0, 'R10':0, 'R11':0, 'R12':0, 'R13':0, 'R14':0, 'R15':0}
-flags = {'N': 0, 'Z':0, 'C':0, 'V':0}
+fileName = ""
+registers = {}
+flags = {}
 toPrintList = ["All the things to be printed will be returned",
 			   "by the function in backend script."]
 
@@ -40,15 +41,12 @@ T2.config(yscrollcommand=S2.set)
 
 # Button Code
 def executeButton():
-	print ("Working")
-	lineNumber = 1
-	for line in T1.get('1.0', 'end-1c').splitlines():
-		if line:
-			print('path: {}'.format(line))
-		lineNumber += 1
+	global registers
+	global flags
 	T3.delete('1.0', END)
-	for line in toPrintList:
-		T3.insert(END, line+"\n")
+	toPrint, registers, flags = backend.main(fileName) 
+	T3.insert(END, toPrint)
+	showRegisters()
 
 def registerToDecimal():
 	for i in registers:
@@ -93,7 +91,9 @@ S3.config(command=T3.yview)
 T3.config(yscrollcommand=S3.set)
 
 def file_dialog():
+	global fileName
 	file = filedialog.askopenfile(parent=root,mode='rb',title='Select a File')
+	fileName =  str(file).split("/")[-1][:-2]
 	if file != None:
 		T1.delete('1.0', END)
 		data = file.read()

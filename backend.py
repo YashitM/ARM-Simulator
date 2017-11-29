@@ -354,9 +354,9 @@ def executeData(totalShift, instruction, cond, opcode, immediate, setConditionCo
 #----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
-def main():
+def main(fileName):
 	global S
-	with open('input4.MEM', 'r') as f:
+	with open(fileName, 'r') as f:
 		instructions = f.readlines()
 	for i in range(len(instructions)):
 		instructions[i] = instructions[i].rstrip("\n")
@@ -366,9 +366,11 @@ def main():
 			registers['R15'] = int(add, 16)
 	#L.append(addressInstructionMap)
 
+	toReturn = ""
+
+
 	while True:
 		
-		print (S)
 		offset = 4
 		i = addressInstructionMap[registers['R15']]
 		#L.append(i)
@@ -380,12 +382,14 @@ def main():
 			S += "EXIT:"
 			#L.append(registers)
 			#L.append(memoryBuffer)
+			return (toReturn, registers, flags)
 			sys.exit()
 
 		if "0xEF000000".lower() in i.lower():
 			S += "DECODE: SWI print character \n"
 			S += "Read registers R0 = " + chr(registers['R0']) + "\n"
 			S += "EXECUTE: " + chr(registers['R0']) + "\n"
+			print (chr(registers['R0']))
 
 		if "0xEF000002".lower() in i.lower():
 			
@@ -429,7 +433,7 @@ def main():
 
 		if "0xEF00006C".lower() in i.lower():
 			S += "DECODE: SWI interger input\n"
-			S += "Read registers: R0 = " + str(register['R0']) + "\n"
+			S += "Read registers: R0 = " + str(registers['R0']) + "\n"
 			S += "EXECUTE: no execute operation\n"
 			S += "MEMORY: No memory operation\n"
 
@@ -453,12 +457,12 @@ def main():
 
 		if "0xEF00006B".lower() in i.lower():
 			S += "DECODE: SWI integer output"
-			S += "Read registers: R0 = " + str(register['R0']) + " R1 = " + str(registers['R1']) + "\n"
+			S += "Read registers: R0 = " + str(registers['R0']) + " R1 = " + str(registers['R1']) + "\n"
 			S += "EXECUTE: Prints from R1\n"
 			S += "MEMORY: No memory operation\n"
-			S += "WRITEBACK: No Writeback"
+			S += "WRITEBACK: No Writeback\n"
 			if registers['R0'] == 1:
-				S += str(registers['R1']) + "\n"
+				print (registers['R1'])
 			else:
 				S += "Invalid file descriptor\n"
 				sys.exit()
@@ -481,6 +485,9 @@ def main():
 			S += "WRITEBACK: No writeback operation \n\n"
 	
 		registers['R15'] += offset
+
+		# print (S)
+		toReturn += S
 	
 
 
@@ -488,4 +495,4 @@ def main():
 
 #1110 1010 111111111111111111111001
 if __name__ == '__main__':
-	main()
+	main('input3.MEM')
