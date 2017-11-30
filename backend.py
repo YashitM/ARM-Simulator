@@ -486,8 +486,8 @@ def main(fileName):
 	
 		registers['R15'] += offset
 
-		print (S)
-		# toReturn += S
+		# print (S)
+		toReturn += S
 	
 
 
