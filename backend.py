@@ -486,8 +486,8 @@ def main(fileName):
 	
 		registers['R15'] += offset
 
-		# print (S)
-		toReturn += S
+		print (S)
+		# toReturn += S
 	
 
 
@@ -495,4 +495,4 @@ def main(fileName):
 
 #1110 1010 111111111111111111111001
 if __name__ == '__main__':
-	main('input3.MEM')
+	main(sys.argv[1])
