@@ -110,53 +110,53 @@ def showRegisters():
 def readFromConsole():
 	temp = input("Type your input here.\n>>> ")
 
-def showGenerateTestCase():
-	window = tkinter.Toplevel(root)
-	window.geometry('{}x{}'.format(850, 600))
-	toolbar = Frame(window)
+# def showGenerateTestCase():
+# 	window = tkinter.Toplevel(root)
+# 	window.geometry('{}x{}'.format(850, 600))
+# 	toolbar = Frame(window)
 
-	S1t = Scrollbar(window)
-	T1t = Text(window, height=23, width=100)
-	S1t.grid(row = 1, column = 1, rowspan=1,  sticky=N+S+W)
-	T1t.grid(row = 1, column = 0, rowspan=1)
-	S1t.config(command=T1t.yview)
-	T1t.config(yscrollcommand=S1t.set)
+# 	S1t = Scrollbar(window)
+# 	T1t = Text(window, height=23, width=100)
+# 	S1t.grid(row = 1, column = 1, rowspan=1,  sticky=N+S+W)
+# 	T1t.grid(row = 1, column = 0, rowspan=1)
+# 	S1t.config(command=T1t.yview)
+# 	T1t.config(yscrollcommand=S1t.set)
 
-	S2t = Scrollbar(window)
-	T2t = Text(window, height=10, width=100)
-	S2t.grid(row = 3, column = 1, rowspan=1,  sticky=N+S+W)
-	T2t.grid(row = 3, column = 0, rowspan=1)
-	S2t.config(command=T2t.yview)
-	T2t.config(yscrollcommand=S2t.set)
+# 	S2t = Scrollbar(window)
+# 	T2t = Text(window, height=10, width=100)
+# 	S2t.grid(row = 3, column = 1, rowspan=1,  sticky=N+S+W)
+# 	T2t.grid(row = 3, column = 0, rowspan=1)
+# 	S2t.config(command=T2t.yview)
+# 	T2t.config(yscrollcommand=S2t.set)
 
-	def localFileDialog():
-		file = filedialog.askopenfile(parent=window,mode='rb',title='Select a File')
-		if file != None:
-			data = file.read()
-			file.close()
-			T1t.insert(END, data)
+# 	def localFileDialog():
+# 		file = filedialog.askopenfile(parent=window,mode='rb',title='Select a File')
+# 		if file != None:
+# 			data = file.read()
+# 			file.close()
+# 			T1t.insert(END, data)
 
-	def genTestCase():
-		T2t.insert(END, "Implement logic in this function.")
+# 	def genTestCase():
+# 		T2t.insert(END, "Implement logic in this function.")
 
-	Bgenerate = tkinter.Button(window, text = "Convert To Test Case", width=20, padx=xAxis, pady=yAxis, command=genTestCase)
-	Bgenerate.grid(row = 2)
+# 	Bgenerate = tkinter.Button(window, text = "Convert To Test Case", width=20, padx=xAxis, pady=yAxis, command=genTestCase)
+# 	Bgenerate.grid(row = 2)
 
-	menu = Menu(window)
-	window.config(menu=menu)
-	menu.add_command(label="Open", command=localFileDialog)
-	toolbar.grid(row = 0)
+	# menu = Menu(window)
+	# window.config(menu=menu)
+	# menu.add_command(label="Open", command=localFileDialog)
+	# toolbar.grid(row = 0)
 
-	def closeWindow():
-		window.destroy()
+	# def closeWindow():
+	# 	window.destroy()
 
 
 	BbackToMainApp = tkinter.Button(window, text = "Back to Main Page", width=20, padx=xAxis, pady=yAxis, command=closeWindow)
 	BbackToMainApp.grid(row = 4)
 
 
-BgenerateTestCase = tkinter.Button(root, text="Generate Test Case", padx=xAxis, pady=yAxis, command=showGenerateTestCase)
-BgenerateTestCase.grid(row = 6)
+# BgenerateTestCase = tkinter.Button(root, text="Generate Test Case", padx=xAxis, pady=yAxis, command=showGenerateTestCase)
+# BgenerateTestCase.grid(row = 6)
 
 
 # readFromConsole()
